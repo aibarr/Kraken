@@ -1,6 +1,6 @@
 {
   "name": "Kraken",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "https://github.com/aibarr/Kraken.git",
   "author": "Aibarr <alfredo.barra@usach.cl>",
@@ -11,6 +11,6 @@
   },
   "scripts": {
     "start": "node ./index.js",
-    "fieldTest" : "node ./test.js"
+    "fieldTest": "node ./test.js"
   }
 }
