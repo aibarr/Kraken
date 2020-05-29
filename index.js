@@ -1,5 +1,7 @@
 var Twit = require('twit')
 const messages = require('./messages')
+const formatISO = require('date-fns/formatISO')
+const addHours = require('date-fns/addHours')
 
 console.log('Liberando al Kraken a las ' + new Date().toString());
 
@@ -13,6 +15,8 @@ var T = new Twit({
 
 let lastTick = new Date()
 
+const users = []
+
 var i = 0;
 
 setInterval(function () {
@@ -24,12 +28,31 @@ setInterval(function () {
   var msg = messages[i];
 
   T.post('statuses/update', { status: msg }, function (err, data, response) {
-    if(!err){
-
+    if (!err) {
       console.log('alfred_barr: ' + msg)
-    }else{
+    } else {
       console.log(err)
     }
   })
 
-}, 60000 * 3)
+  T.get('search/tweets', { q: '@AyudaMovistarCL', since: formatISO(addHours(lastTick, -4)).toString(), count: 10 }, function (err, data, response) {
+    if (!err) {
+      const statuses = data.statuses
+
+      Array.isArray(statuses) && statuses.forEach(tw => {
+        const theUser = tw.user.screen_name
+        if (!users.includes(theUser)) {
+          T.post('statuses/retweet/:id', { id: tw.id, status: 'Hola @' + theUser + ' \nSi también tienes problemas con @MovistarChile ayudémonos con un RT y los hash  #PesimoServicio #CeroEstrellas #QuantaxNoAyuda' }, function (err, data, response) {
+            if (!err) {
+              console.log("Ayuda pedida a " + theUser)
+            }
+          })
+        }
+      })
+    }
+  })
+
+
+
+}, 60000 * 5)
+
