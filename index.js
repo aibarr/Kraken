@@ -19,11 +19,11 @@ const users = []
 
 var i = 0;
 
-setInterval(function () {
+const theInteval = setInterval(function () {
 
   console.log('Tirando el mensaje ' + i);
 
-  i = (i + 1) % 3;
+  i = (i + 1) % messages.length;
 
   var msg = messages[i];
 
