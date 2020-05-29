@@ -6,6 +6,10 @@
   "author": "Aibarr <alfredo.barra@usach.cl>",
   "license": "MIT",
   "dependencies": {
+    "date-fns": "^2.14.0",
     "twit": "^2.2.11"
+  },
+  "scripts": {
+    "start": "node ./index.js"
   }
 }
