@@ -1,0 +1,11 @@
+{
+  "name": "Kraken",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/aibarr/Kraken.git",
+  "author": "Aibarr <alfredo.barra@usach.cl>",
+  "license": "MIT",
+  "dependencies": {
+    "twit": "^2.2.11"
+  }
+}
