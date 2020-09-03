@@ -16,6 +16,7 @@ var T = new Twit({
 let lastTick = new Date()
 
 const users = []
+const retwitted = []
 
 var i = 0;
 
@@ -34,25 +35,39 @@ const theInteval = setInterval(function () {
       console.log(err)
     }
   })
+}, 60000 * 5)
 
-  T.get('search/tweets', { q: '@AyudaMovistarCL', since: formatISO(addHours(lastTick, -4)).toString(), count: 10 }, function (err, data, response) {
+const rtInterval = setInterval(function () {
+  T.get('search/tweets', { q: '@FalabellaAyuda', since: formatISO(lastTick).toString(), count: 10 }, function (err, data, response) {
     if (!err) {
+      console.log("Retwiteando")
       const statuses = data.statuses
 
       Array.isArray(statuses) && statuses.forEach(tw => {
         const theUser = tw.user.screen_name
-        if (!users.includes(theUser)) {
-          T.post('statuses/retweet/:id', { id: tw.id, status: 'Hola @' + theUser + ' \nSi también tienes problemas con @MovistarChile ayudémonos con un RT y los hash  #PesimoServicio #CeroEstrellas #QuantaxNoAyuda' }, function (err, data, response) {
+        if (!users.includes(theUser) && !retwitted.includes(tw.id_str) && theUser !== 'FalabellaAyuda' && theUser !== 'alfred_barr' && theUser !== 'FalabellaAyuda') {
+          console.log("Retwiteando A " + theUser)
+          console.log(tw.id_str)
+          retwitted.push(tw.id_str)
+          T.post('statuses/update', { in_reply_to_status_id: tw.id_str, status: 'Hola @' + theUser + ' \nSi también tienes problemas con @FalabellaAyuda @Falabella_Chile ayudémonos con un RT y los hash  #FalabellaNoResponde #CeroEstrellas' }, function (err, data, response) {
             if (!err) {
+              T.post('statuses/retweet/' + tw.id_str, {})
               console.log("Ayuda pedida a " + theUser)
+              let tweetId = data.id_str;
+              console.log("tweet nuevo " + tweetId)
+              users.push(theUser)
+            } else {
+              console.error(err)
             }
           })
         }
       })
+    } else {
+      console.error(err)
     }
   })
 
+  lastTick = new Date()
 
-
-}, 60000 * 5)
+}, 60000 * 2)
 
